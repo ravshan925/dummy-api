@@ -1,0 +1,1025 @@
+{
+	"info": {
+		"_postman_id": "fa8426f4-501d-4080-aa51-c25c134ce10d",
+		"name": "Run Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19869749"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200, GET all User List\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/user",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get List Pagging",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/user?page=1&limit=50",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"user"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get List Pagging Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/user?page=1&limit=50",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"user"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get List (NO AUTH)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403 Forbidden\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://dummyapi.io/data/v1/user",
+							"protocol": "https",
+							"host": [
+								"dummyapi",
+								"io"
+							],
+							"path": [
+								"data",
+								"v1",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData=pm.response.json();",
+									"pm.environment.set(\"email\", jsonData.email);",
+									"pm.environment.set(\"userId\", jsonData.id);",
+									"//status 200",
+									"pm.test(\"Status code is 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"//response",
+									"pm.test(\"Body is correct\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"id\");",
+									"});",
+									"//header present check",
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"//",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});",
+									"",
+									"//if&&else"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "{{$randomEmail}}",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "{{$randomLastName}}",
+									"type": "text"
+								},
+								{
+									"key": "firstName",
+									"value": "{{$randomFirstName}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://dummyapi.io/data/v1/user/create",
+							"protocol": "https",
+							"host": [
+								"dummyapi",
+								"io"
+							],
+							"path": [
+								"data",
+								"v1",
+								"user",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Created User by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://dummyapi.io/data/v1/user/{{userId}}",
+							"protocol": "https",
+							"host": [
+								"dummyapi",
+								"io"
+							],
+							"path": [
+								"data",
+								"v1",
+								"user",
+								"{{userId}}"
+							],
+							"query": [
+								{
+									"key": "user",
+									"value": "63351451d95e2b4de1b45956",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update userId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData=pm.response.json();",
+									"pm.environment.set(\"updatedUserId\", jsonData.id);",
+									"// check status 200 OK",
+									"pm.test(\"Status code is 200, successfully updated user body by userID\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"New Ravshan\",\n    \"lastName\": \"New Abdu\", \n    \"email\": \"New ravshan123@gmail.com\"\n} \n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/user/{{userId}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"user",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Update userId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// check status 200 OK",
+									"pm.test(\"Status code is 200, successfully get updated user body by updatedUserID\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://dummyapi.io/data/v1/user/{{updatedUserId}}",
+							"protocol": "https",
+							"host": [
+								"dummyapi",
+								"io"
+							],
+							"path": [
+								"data",
+								"v1",
+								"user",
+								"{{updatedUserId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData=pm.response.json();",
+									"pm.environment.set(\"deleteUserId\", jsonData.id);",
+									"// check status 200 OK",
+									"pm.test(\"Status code is 200, successfully deleted user by updatedUserId\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://dummyapi.io/data/v1/user/{{updatedUserId}}",
+							"protocol": "https",
+							"host": [
+								"dummyapi",
+								"io"
+							],
+							"path": [
+								"data",
+								"v1",
+								"user",
+								"{{updatedUserId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Deleted User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// check status 200 OK",
+									"pm.test(\"Status code is 404, RESOURCE_NOT_FOUND\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://dummyapi.io/data/v1/user/{{deleteUserId}}",
+							"protocol": "https",
+							"host": [
+								"dummyapi",
+								"io"
+							],
+							"path": [
+								"data",
+								"v1",
+								"user",
+								"{{deleteUserId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData=pm.response.json();",
+									"pm.environment.set(\"email\", jsonData.email);",
+									"pm.environment.set(\"userId\", jsonData.id);",
+									"//check status 200 success",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"//check status 400  Bad requst if user email is exist",
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"//response",
+									"pm.test(\"Body is correct\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"id\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Ravshan\",\n    \"lastName\": \"Abdu\", \n    \"email\": \"{{$randomEmail}}\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://dummyapi.io/data/v1/user/create",
+							"protocol": "https",
+							"host": [
+								"dummyapi",
+								"io"
+							],
+							"path": [
+								"data",
+								"v1",
+								"user",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Created User by id 2",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://dummyapi.io/data/v1/user/{{userId}}",
+							"protocol": "https",
+							"host": [
+								"dummyapi",
+								"io"
+							],
+							"path": [
+								"data",
+								"v1",
+								"user",
+								"{{userId}}"
+							],
+							"query": [
+								{
+									"key": "user",
+									"value": "63351451d95e2b4de1b45956",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Post",
+			"item": [
+				{
+					"name": "Get Post List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// check status 200 OK",
+									"pm.test(\"Status code is 200, Get List of Posts\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/post",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"post"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData=pm.response.json();",
+									"pm.environment.set(\"postId\", jsonData.id);",
+									"// check status 200 OK",
+									"pm.test(\"Status code is 200, successfully created Post by userID\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"//response",
+									"pm.test(\"Body is correct\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"id\");",
+									"});",
+									"//header present check",
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"//",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"text\": \"{{$randomWords}} !\",\n    \"image\":\"{{$randomImageUrl}}\",\n    \"likes\": {{$randomInt}},\n    \"tags\":\"{{$randomCompanySuffix}}\",\n    \"owner\": \"{{userId}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/post/create",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"post",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Created Post by userId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/post/{{postId}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"post",
+								"{{postId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData=pm.response.json();",
+									"pm.environment.set(\"updatedPostId\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"owner\": \"{{postId}}\",\n    \"text\": \"Updated {{$randomLoremParagraph}}\",\n    \"image\":\"{{$randomImageUrl}}\",\n    \"tags\":\"{{$randomBitcoin}}\",\n    \"likes\": {{$randomInt}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/post/{{postId}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"post",
+								"{{postId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get updatedPostId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/post/{{updatedPostId}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"post",
+								"{{updatedPostId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Post by updatedPostId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData=pm.response.json();",
+									"pm.environment.set(\"deleteId\", jsonData.id);",
+									"// check status 200 OK",
+									"pm.test(\"Status code is 200, successfully deleted Post by updatedPostId\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/post/{{updatedPostId}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"post",
+								"{{updatedPostId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get deletedId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"404 Not Found\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/post/{{deleteId}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"post",
+								"{{deleteId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Post Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData=pm.response.json();",
+									"pm.environment.set(\"postId\", jsonData.id);",
+									"// check status 200 OK",
+									"pm.test(\"Status code is 200, successfully created Post by userID\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"//header present check",
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"//",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"text\": \"{{$randomWords}} !\",\n    \"image\":\"{{$randomImageUrl}}\",\n    \"likes\": {{$randomInt}},\n    \"tags\":\"{{$randomCompanySuffix}}\",\n    \"owner\": \"{{userId}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/post/create",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"post",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Created Post by userId Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/post/{{postId}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"post",
+								"{{postId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comment",
+			"item": [
+				{
+					"name": "Get List of Comment",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/comment",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"comment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData=pm.response.json();",
+									"pm.environment.set(\"commentId\", jsonData.id);",
+									"// check status 200 OK",
+									"pm.test(\"Status code is 200, successfully created Comment by userID and postId\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"//header present check",
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"//",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"owner\": \"{{userId}}\",\n    \"message\": \"1, {{$randomWords}} !\",\n    \"post\":\"{{postId}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/comment/create",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"comment",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Created CommentId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/user/{{userId}}/comment",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"user",
+								"{{userId}}",
+								"comment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get List of Comment By User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/user/{{commentId}}/comment",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"user",
+								"{{commentId}}",
+								"comment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Comment by (variable)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData=pm.response.json();",
+									"pm.environment.set(\"deleteCommentId\", jsonData.id);",
+									"// check status 200 OK",
+									"pm.test(\"Status code is 200, successfully deleted Comment by commentId\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/comment/{{commentId}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"comment",
+								"{{commentId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get deleteId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404, Resource_not_found\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/user/{{deleteCommentId}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"user",
+								"{{deleteCommentId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test.skip(\"Status 200\", ()=>pm.response.to.have.status(200));",
+							"",
+							"if(someCondition){",
+							"\tpm.expect.fail('THis fail')",
+							"}",
+							"else {",
+							"\tpm.expect.fail('Good')",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/tag",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"tag"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "63350410102ca5c07485ccfa",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "app-id",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
